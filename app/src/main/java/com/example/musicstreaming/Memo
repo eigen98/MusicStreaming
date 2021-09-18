@@ -1,0 +1,98 @@
+목차
+### 재생화면 UI 구성하기
+    ->사용할 라이브러리 추가
+        retrofit ,Glide, ExoPlayer , 뷰바인딩
+                implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+                implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+                implementation 'com.github.bumptech.glide:glide:4.12.0'
+
+                implementation 'com.google.android.exoplayer:exoplayer:2.13.3'
+
+                코틀린옵션 밑에
+                viewBinding {
+                    enabled = true
+                }
+    -> NoActionBar , statusBar  설정
+    ->프래그먼트 생성
+        supportFragmentManager를 통해 트랜잭션 생성
+        프래그먼트 클래스의 인스턴스생성 함수 사용newInstance()
+    ->layout_constraintVertical_weight 으로 조절가능
+    ->translationY으로 뷰 위치 내리기 가능(원래위치에서 내리는 것이라서 다른 컴포넌트와 위치 조율하면 원래위치로 조정 주의)
+    ->이미지뷰는 카드뷰로 감싸주는 게 더 이쁨
+    ->app:cardElevation="10dp"를 통해 그림자 생성 z축 올리기 . 메터리얼 디자인에서 추구, cardCornerRadius를 통해 카드뷰 동그랗게
+
+### 플레이리스트 UI 구성하기
+    ->exoplayer 뷰 생성
+    <com.google.android.exoplayer2.ui.PlayerView
+    app:layout_constraintHorizontal_bias="0.8"를 통해 위치 설정 가능
+
+    ->Seekbar 뷰 생성
+        layer-list를 통해 커스텀 (공부필요할듯) -> progressDrawable속성에 추가 -> thumb속성 에 추가
+
+    ->리사이클러뷰 추가
+
+### 음악 목록 API 만들기
+
+    ->데이터 모델 만들기
+        ->MusicDto, MusicEntity 생성
+        ->위에 맞게 Api response작성
+    ->재생목록 만들기
+        크롤링을 통해서 NCS에서 가져옴
+            도구더보기 -> 개발자 도구 -> Select an element in the page to inspect it...(왼쪽 위) ->Url복사하여 재생목록 구성
+        mocky에 업로드
+        레트로핏을 이용해 데이터 호출
+        인터넷 권한 설정 깜박 주의
+
+
+ExoPlayer를 이용하여 음악 재생하기 (1)
+    ->플레이어를 만든다.
+    -> 스위칭 구현
+        그룹 기능 사용 ->여러개의 레퍼런스 아이디로 묶여있는 그룹생성 => 레이아웃ConstraintLayout 에서 제공
+
+    -> 화면전환
+        프래그먼트클래스에서 뷰바인딩먼저 설정
+    ->리사이클러뷰를 위한 아이템 레이아웃 생성
+    ->뮤직 모델 클래스 별도로 생성
+
+    ->MusicEntity를 MusicModel로 바꾸는 작업 필요 -> MusicEntity확장
+        fun MusicEntity.mapper() : MusicModel{
+            MusicModel(
+                    id = id,
+                    streamUrl = this.streamUrl,
+                    coverUrl = this.coverUrl,
+                    track = this.track,
+                    artist = this.artist
+                )
+        }
+
+
+ExoPlayer를 이용하여 음악 재생하기 (2)
+    ->
+ExoPlayer를 이용하여 음악 재생하기 (3)
+ExoPlayer를 이용하여 음악 재생하기 (4)
+아웃트로
+
+
+배우는 것
+Exoplayer 사용하기 (2)
+custom controller
+Playlist 등
+androidx.constraintlayout.widget.Group
+Seekbar Custom 하기
+ExoPlayer
+Google이 Android SDK 와 별도로 배포되는 오픈소스 프로젝트
+오디오 및 동영상 재생 가능
+오디오 및 동영상 재생 관련 강력한 기능들 포함
+유튜브 앱에서 사용하는 라이브러리
+https://exoplayer.dev/hello-world.html
+음악 스트리밍 앱
+Retrofit 을 이용하여 재생 목록을 받아와 구성함
+
+재생 목록을 클릭하여 ExoPlayer 를 이용하여 음악을 재생할 수 있음.
+
+이전, 다음 트랙 버튼을 눌러서 이전, 다음 음악으로 재생하고, ui 를 업데이트 할 수 있음.
+
+PlayList 화면과 Player 화면 간의 전환을 할 수 있음.
+
+Seekbar 를 custom 하여 원하는 UI 로 표시할 수 있음.
